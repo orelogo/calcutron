@@ -7,6 +7,28 @@ var tempNumber = ""; // current number being entered
 var tempOperator = ""; // current operation being entered
 var expression = []; // array that will store numbers and operators
 var lastStoredValueIsNumber = false; // last value saved to expression array
+var lastNumberStored, // allow user to keep pressing equals
+    lastOperatorStored;
+
+/**
+ * Store tempNumber into expression array and lastNumberStored variable
+ */
+function storeNumber() {
+  expression.push(tempNumber);
+  lastNumberStored = tempNumber;
+  tempNumber = "";
+  lastStoredValueIsNumber = true;
+}
+
+/**
+ * Store tempOperator into expression array and lastOperatorStored variable
+ */
+function storeOperator() {
+  expression.push(tempOperator); // store operator
+  lastOperatorStored = tempOperator;
+  tempOperator = "";
+  lastStoredValueIsNumber = false;
+}
 
 /**
  * Add number to epression array
@@ -14,9 +36,7 @@ var lastStoredValueIsNumber = false; // last value saved to expression array
 function addNumber(value) {
   // last stored value is a number and there is a temp operator currently
   if (lastStoredValueIsNumber && tempOperator.length === 1) {
-    expression.push(tempOperator); // store operator
-    tempOperator = "";
-    lastStoredValueIsNumber = false;
+    storeOperator();
   }
 
   // last stored value was an operator or if we cleared memory
@@ -34,9 +54,7 @@ function addOperator(operator) {
 
   // last stored value was an operator and there is a temp number currently
   if (!lastStoredValueIsNumber && tempNumber.length > 0) {
-    expression.push(tempNumber); // store number
-    tempNumber = "";
-    lastStoredValueIsNumber = true;
+    storeNumber();
   }
 
   // last stored value was a number
@@ -65,6 +83,8 @@ function clearEverything() {
   expression = [];      // clear expression
   tempNumber = "";   // clear current number
   tempOperator = ""; // clear current operator
+  lastNumberStored = "";
+  lastOperatorStored = "";
   lastStoredValueIsNumber = false;
   displayOutput();
 }
@@ -79,48 +99,58 @@ function clearCurrentEntry() {
 }
 
 function equals() {
-  // if there is a temp number being display that we need to add to expression
-  if (!lastStoredValueIsNumber && tempNumber.length > 0) {
-    expression.push(tempNumber);
-    tempNumber = "";
-    lastStoredValueIsNumber = true;
+
+  // for repeatedly pressing equals to perform last operation
+  if (expression.length === 0 &&
+      lastOperatorStored.length === 1 &&
+      lastNumberStored.length > 0) {
+    tempNumber = performOperation(tempNumber, lastOperatorStored,
+      lastNumberStored).toString(); // need to string for .length to work
   }
-
-  var answerTemp; // temporary answer
-
-  // iterate through expression to perform multiplication and division
-  for (var i = 0; i < expression.length - 1; i++) {
-    // if division or multiplication sign, perform operation
-    if (expression[i] === MULTIPLY || expression[i] === DIVIDE) {
-      // perform operation
-      answerTemp = performOperation(expression[i - 1], expression[i],
-        expression[i + 1]);
-      // remove current operator and two neighbouring values from array and
-      // replace with their evaluation
-      expression.splice(i-1, 3, answerTemp);
-      i--; // move counter back one position to not skip next operator
+  else {
+    // if there is a temp number, we need to add to expression
+    if (!lastStoredValueIsNumber && tempNumber.length > 0) {
+      storeNumber();
     }
-  }
 
-  // iterate through expression to perform addition and subraction
-  for (var i = 0; i < expression.length - 1; i++) {
-    if (expression[i] === ADD || expression[i] === SUBTRACT) {
-      // perform operation
-      answerTemp = performOperation(expression[i - 1], expression[i],
-        expression[i + 1]);
-      // remove current operator and two neighbouring value from array and
-      // replace with their evaluation
-      expression.splice(i-1, 3, answerTemp);
-      i--; // move counter back one position to not skip next operator
+    var answerTemp; // temporary answer
+
+    // iterate through expression to perform multiplication and division
+    for (var i = 0; i < expression.length - 1; i++) {
+      // if division or multiplication sign, perform operation
+      if (expression[i] === MULTIPLY || expression[i] === DIVIDE) {
+        // perform operation
+        answerTemp = performOperation(expression[i - 1], expression[i],
+          expression[i + 1]);
+        // remove current operator and two neighbouring values from array and
+        // replace with their evaluation
+        expression.splice(i-1, 3, answerTemp);
+        i--; // move counter back one position to not skip next operator
+      }
     }
-  }
 
-  /* expression now has a length of 1 with only the final answer */
+    // iterate through expression to perform addition and subraction
+    for (var i = 0; i < expression.length - 1; i++) {
+      if (expression[i] === ADD || expression[i] === SUBTRACT) {
+        // perform operation
+        answerTemp = performOperation(expression[i - 1], expression[i],
+          expression[i + 1]);
+        // remove current operator and two neighbouring value from array and
+        // replace with their evaluation
+        expression.splice(i-1, 3, answerTemp);
+        i--; // move counter back one position to not skip next operator
+      }
+    }
 
-  // store value in temp number; must be string to work with .length property
-  tempNumber = expression[0].toString();
-  expression = [];            // clear expression
-  lastStoredValueIsNumber = false;
+    /* expression now has a length of 1 with only the final answer */
+
+    // store value in temp number; must be string to work with .length property
+    tempNumber = expression[0].toString();
+    expression = [];           // clear expression
+    tempOperator = "";         // clear temp operator for display purposes
+    lastStoredValueIsNumber = false;
+  } // end else
+
   displayOutput();
 }
 
