@@ -1,22 +1,3 @@
-/*
-
-press button
-display number
-add number to buffer
-
-
-
-
-
-
-
-*/
-
-const NUMBER = 1;
-const OPERATOR = 2;
-const EQUALS = 3;
-var lastButton; // last button pressed
-
 const ADD = "+";
 const MULTIPLY = "\u00D7"; // unicode for multiplication sign
 const DIVIDE = "\u00F7"; // unicode for division sign
@@ -25,24 +6,24 @@ const SUBTRACT = "\u2212"; // unicode for subtraction sign
 var tempNumber = ""; // current number being entered
 var tempOperator = ""; // current operation being entered
 var expression = []; // array that will store numbers and operators
-//var lastValueIsNumber = false; // was the last value entered a number
-
-
+var lastStoredValueIsNumber = false; // last value saved to expression array
 
 /**
  * Add number to epression array
  */
 function addNumber(value) {
-  if (lastButton === EQUALS) {
-    expression = []; // remove only item from expression
-  }
-  else if (lastButton === OPERATOR) {
-    expression.push(tempOperator);
+  // last stored value is a number and there is a temp operator currently
+  if (lastStoredValueIsNumber && tempOperator.length === 1) {
+    expression.push(tempOperator); // store operator
     tempOperator = "";
+    lastStoredValueIsNumber = false;
   }
-  tempNumber += value;
-  lastButton = NUMBER;
-  displayOutput()
+
+  // last stored value was an operator or if we cleared memory
+  if (!lastStoredValueIsNumber) {
+    tempNumber += value;
+    displayOutput()
+  }
 }
 
 /**
@@ -50,14 +31,19 @@ function addNumber(value) {
  * - ensure you cannot have two operators beside one another
  */
 function addOperator(operator) {
-  if (lastButton === NUMBER) {
-    // add current number to expression array and clear it
-    expression.push(tempNumber);
+
+  // last stored value was an operator and there is a temp number currently
+  if (!lastStoredValueIsNumber && tempNumber.length > 0) {
+    expression.push(tempNumber); // store number
     tempNumber = "";
+    lastStoredValueIsNumber = true;
   }
-  tempOperator = operator;
-  lastButton = OPERATOR;
-  displayOutput();
+
+  // last stored value was a number
+  if (lastStoredValueIsNumber) {
+    tempOperator = operator;
+    displayOutput();
+  }
 }
 
 function displayOutput() {
@@ -79,6 +65,7 @@ function clearEverything() {
   expression = [];      // clear expression
   tempNumber = "";   // clear current number
   tempOperator = ""; // clear current operator
+  lastStoredValueIsNumber = false;
   displayOutput();
 }
 
@@ -88,20 +75,15 @@ function clearEverything() {
 function clearCurrentEntry() {
   tempNumber = ""; // clear current number
   tempOperator = ""; // clear current operator
-  if (lastButton === OPERATOR) {
-    lastButton === NUMBER; // so that you can re-enter a new operator
-  }
   displayOutput();
 }
 
 function equals() {
-
-  if (lastButton === NUMBER) { // if there is a current number, add it to array
+  // if there is a temp number being display that we need to add to expression
+  if (!lastStoredValueIsNumber && tempNumber.length > 0) {
     expression.push(tempNumber);
-    tempNumber = ""; // empty current number
-  }
-  else if (lastButton === OPERATOR) { // last value is operator
-    expression.pop(expression.length - 1); // remove operator from end of array
+    tempNumber = "";
+    lastStoredValueIsNumber = true;
   }
 
   var answerTemp; // temporary answer
@@ -129,12 +111,16 @@ function equals() {
       // remove current operator and two neighbouring value from array and
       // replace with their evaluation
       expression.splice(i-1, 3, answerTemp);
-      i--;
+      i--; // move counter back one position to not skip next operator
     }
   }
 
-  // expression now has a length of 1 with only the final answer
-  lastButton = EQUALS;
+  /* expression now has a length of 1 with only the final answer */
+
+  // store value in temp number; must be string to work with .length property
+  tempNumber = expression[0].toString();
+  expression = [];            // clear expression
+  lastStoredValueIsNumber = false;
   displayOutput();
 }
 
@@ -153,24 +139,16 @@ function performOperation(a, operator, b) {
   else if (operator === DIVIDE) {
     return a / b;
   }
-
 };
 
-
 $(document).ready(function() {
-
   $(".number-btn").click(function() {
     addNumber( $(this).text() );
   });
-
   $(".operator-btn").click(function() {
     addOperator( $(this).text() );
   });
-
   $("#clear-everything").click(clearEverything);
-
   $("#clear-entry").click(clearCurrentEntry);
-
   $("#equals").click(equals);
-
 });
