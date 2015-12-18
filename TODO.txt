@@ -1,4 +1,6 @@
-- add clearing
+- add ability to change sign
+- add ability to keep pressing equals
+- no double decimals
+-
 
 Bugs
-- figure out initial undefined within the array
