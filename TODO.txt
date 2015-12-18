@@ -1,6 +1,9 @@
+
 - add ability to change sign
+  - make a temp variable
 - add ability to keep pressing equals
 - no double decimals
 -
 
 Bugs
+- clear entry does not work after pressing equals

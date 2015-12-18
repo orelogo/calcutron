@@ -7,6 +7,9 @@ add number to buffer
 
 
 
+
+
+
 */
 
 const NUMBER = 1;
@@ -17,9 +20,10 @@ var lastButton; // last button pressed
 const ADD = "+";
 const MULTIPLY = "\u00D7"; // unicode for multiplication sign
 const DIVIDE = "\u00F7"; // unicode for division sign
-const SUBTRACT = "\u2212";
+const SUBTRACT = "\u2212"; // unicode for subtraction sign
 
-var currentNumber = ""; // current number being entered
+var tempNumber = ""; // current number being entered
+var tempOperator = ""; // current operation being entered
 var expression = []; // array that will store numbers and operators
 //var lastValueIsNumber = false; // was the last value entered a number
 
@@ -32,7 +36,11 @@ function addNumber(value) {
   if (lastButton === EQUALS) {
     expression = []; // remove only item from expression
   }
-  currentNumber += value;
+  else if (lastButton === OPERATOR) {
+    expression.push(tempOperator);
+    tempOperator = "";
+  }
+  tempNumber += value;
   lastButton = NUMBER;
   displayOutput()
 }
@@ -44,15 +52,12 @@ function addNumber(value) {
 function addOperator(operator) {
   if (lastButton === NUMBER) {
     // add current number to expression array and clear it
-    expression.push(currentNumber);
-    currentNumber = "";
+    expression.push(tempNumber);
+    tempNumber = "";
   }
-  if (lastButton === NUMBER || lastButton === EQUALS) {
-    // add operator to expression array
-    expression.push(operator);
-    lastButton = OPERATOR;
-    displayOutput();
-  }
+  tempOperator = operator;
+  lastButton = OPERATOR;
+  displayOutput();
 }
 
 function displayOutput() {
@@ -60,7 +65,9 @@ function displayOutput() {
   for (var i = 0; i < expression.length; i++) {
     displayOutput += expression[i] + " ";
   }
-  displayOutput += currentNumber;
+  // add temporary operator and number to display
+  // only one of these two should ever be present at the same time
+  displayOutput += tempOperator + tempNumber;
   displayOutput = displayOutput.trim();
   $("#display").text(displayOutput);
 }
@@ -69,8 +76,9 @@ function displayOutput() {
  * Clear everything
  */
 function clearEverything() {
-  expression = []; // clear expression
-  currentNumber = ""; // clear current number
+  expression = [];      // clear expression
+  tempNumber = "";   // clear current number
+  tempOperator = ""; // clear current operator
   displayOutput();
 }
 
@@ -78,15 +86,19 @@ function clearEverything() {
  * Clear entry
  */
 function clearCurrentEntry() {
-  currentNumber = ""; // clear current number
+  tempNumber = ""; // clear current number
+  tempOperator = ""; // clear current operator
+  if (lastButton === OPERATOR) {
+    lastButton === NUMBER; // so that you can re-enter a new operator
+  }
   displayOutput();
 }
 
 function equals() {
 
   if (lastButton === NUMBER) { // if there is a current number, add it to array
-    expression.push(currentNumber);
-    currentNumber = ""; // empty current number
+    expression.push(tempNumber);
+    tempNumber = ""; // empty current number
   }
   else if (lastButton === OPERATOR) { // last value is operator
     expression.pop(expression.length - 1); // remove operator from end of array
