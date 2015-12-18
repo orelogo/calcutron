@@ -1,1 +1,4 @@
-- write functions
+- add clearing
+
+Bugs
+- figure out initial undefined within the array

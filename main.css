@@ -16,7 +16,7 @@ body {
   flex-flow: row wrap;
   justify-content: space-around;
 }
-.calc-button {
+.calc-btn {
   width: 70px;
   margin: 7px 7px;
 }
