@@ -1,0 +1,25 @@
+body {
+  background-color: rgb(161, 113, 7);
+}
+
+#calculator {
+  width: 400px;
+  margin: 30px auto;
+}
+#display {
+  margin: 10px auto;
+  text-align: right;
+  background-color: rgb(220, 220, 220);
+}
+#button-pad {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.calc-button {
+  width: 70px;
+  margin: 7px 7px;
+}
+#equals-button {
+  width: 160px;
+}
