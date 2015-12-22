@@ -1,7 +1,12 @@
 body {
   background-color: rgb(161, 113, 7);
+  font-family: 'Nova Mono', monospace;
 }
-
+h1 {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 2.5em;
+}
 #calculator {
   width: 400px;
   margin: 30px auto;
@@ -22,7 +27,4 @@ body {
 .calc-btn {
   width: 70px;
   margin: 7px 7px;
-}
-#equals {
-  width: 160px;
 }

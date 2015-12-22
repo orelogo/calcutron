@@ -9,26 +9,30 @@
   crossorigin="anonymous">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css" rel="stylesheet">
   <link href="main.css" rel="stylesheet" type="text/css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
-  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js" defer></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"
+  defer></script>
+  <script src="script.js" defer></script>
+  <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet" type="text/css">
   <title>Calcutron</title>
 </head>
 
 <body>
   <div class="container">
     <div class="well" id="calculator">
+      <h1>Calcutron 7200</h1>
       <div class="well" id="display">
       </div>
       <div id="button-pad">
         <button class="btn btn-default calc-btn" id="clear-everything">AC</button>
         <button class="btn btn-default calc-btn" id="clear-entry">CE</button>
-        <button class="btn btn-default calc-btn">%</button>
-        <button class="btn btn-default calc-btn operator-btn">&divide;</button> <!-- division -->
+        <button class="btn btn-default calc-btn" id="square-root">&#8730;</button>
+        <button class="btn btn-default calc-btn operator-btn">&divide;</button>
         <button class="btn btn-default calc-btn number-btn">7</button>
         <button class="btn btn-default calc-btn number-btn">8</button>
         <button class="btn btn-default calc-btn number-btn">9</button>
-        <button class="btn btn-default calc-btn operator-btn">&times;</button> <!-- multiplication -->
+        <button class="btn btn-default calc-btn operator-btn">&times;</button>
+        <!-- multiplication -->
         <button class="btn btn-default calc-btn number-btn">4</button>
         <button class="btn btn-default calc-btn number-btn">5</button>
         <button class="btn btn-default calc-btn number-btn">6</button>
@@ -37,8 +41,9 @@
         <button class="btn btn-default calc-btn number-btn">2</button>
         <button class="btn btn-default calc-btn number-btn">3</button>
         <button class="btn btn-default calc-btn operator-btn">&plus;</button>
+        <button class="btn btn-default calc-btn" id="plus-minus">&#177;</button>
         <button class="btn btn-default calc-btn number-btn">0</button>
-        <button class="btn btn-default calc-btn number-btn">.</button>
+        <button class="btn btn-default calc-btn" id="decimal-point">.</button>
         <button class="btn btn-default calc-btn" id="equals">&equals;</button>
 
 
