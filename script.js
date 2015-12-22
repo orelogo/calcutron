@@ -287,14 +287,29 @@ function activateInputButtons() {
     inputButtonsAreActive = true;
     $(".number-btn").on("click", function() {
       addNumber( $(this).text() );
+      // deselects button, necessary for keyboard input ENTER to work without error
+      $(this).blur();
     });
     $(".operator-btn").on("click", function() {
       addOperator( $(this).text() );
+      $(this).blur();
     });
-    $("#square-root").on("click", addSquareRoot);
-    $("#plus-minus").on("click", plusMinus);
-    $("#decimal-point").on("click", addDecimalPoint);
-    $("#equals").on("click", equals);
+    $("#square-root").on("click", function() {
+      addSquareRoot();
+      $(this).blur();
+    });
+    $("#plus-minus").on("click", function() {
+      plusMinus();
+      $(this).blur();
+    });
+    $("#decimal-point").on("click", function() {
+      addDecimalPoint();
+      $(this).blur();
+    });
+    $("#equals").on("click", function() {
+      equals();
+      $(this).blur();
+    });
 
     // keyboard inputs
     $(document).on("keypress", function(event) {
@@ -350,7 +365,13 @@ function activateInputButtons() {
 }
 
 $(document).ready(function() {
-  $("#clear-everything").on("click", clearAll);
-  $("#clear-entry").on("click", clearCurrentEntry);
+  $("#clear-everything").on("click", function() {
+    clearAll();
+    $(this).blur();
+  });
+  $("#clear-entry").on("click", function() {
+    clearCurrentEntry();
+    $(this).blur();
+  });
   activateInputButtons(); // activate input buttons (saves lines of code)
 });
