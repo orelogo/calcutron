@@ -287,7 +287,8 @@ function activateInputButtons() {
     inputButtonsAreActive = true;
     $(".number-btn").on("click", function() {
       addNumber( $(this).text() );
-      // deselects button, necessary for keyboard input ENTER to work without error
+      // removes focus from button, necessary for keyboard input ENTER to
+      // work without "clicking" last pressed key
       $(this).blur();
     });
     $(".operator-btn").on("click", function() {
